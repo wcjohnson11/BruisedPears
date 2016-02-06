@@ -12,6 +12,8 @@ import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    
+    @IBOutlet weak var networkErrorView: UIView!
     @IBOutlet weak var tableView: UITableView!
     var movies: [MovieModel] = []
     var endpoint: String!
@@ -19,9 +21,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
         tableView.dataSource = self
         tableView.delegate = self
+        networkErrorView.hidden = true;
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = NSURL(string: "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
@@ -38,7 +40,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             completionHandler: { (dataOrNil, response, error) in
                 
                 if(error != nil) {
-                
+                    self.networkErrorView.hidden = false
                 }
                 
                 if let data = dataOrNil {
