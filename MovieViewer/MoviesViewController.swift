@@ -59,6 +59,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             for movie in moviesArr {
                                 self.movies.append(MovieModel(json: (movie as? NSDictionary)!))
                             }
+
                             self.tableView.reloadData()
                             
                     }
@@ -84,11 +85,27 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         if let posterPath = movie.poster! as String? {
             let baseUrl = "http://image.tmdb.org/t/p/w500"
             let posterUrl = NSURL(string: baseUrl + posterPath)
+            cell.titleLabel.text = "\(movie.title!)"
+            cell.overviewLabel.text = "\(movie.overview!)"
+            cell.posterView.alpha = 0.0
+            cell.titleLabel.alpha = 0.0
+            cell.overviewLabel.alpha = 0.0
             cell.posterView.setImageWithURL(posterUrl!)
+            
+            UIView.animateWithDuration(0.333, animations: { () -> Void in
+                cell.posterView.alpha = 1.0
+                cell.titleLabel.alpha = 1.0
+                cell.overviewLabel.alpha = 1.0
+                }
+            )
         }
         
-        cell.titleLabel.text = "\(movie.title!)"
-        cell.overviewLabel.text = "\(movie.overview!)"
+        //let backgroundView = UIView()
+        //backgroundView.backgroundColor = UIColor.redColor()
+        //cell.selectedBackgroundView = backgroundView
+        cell.selectionStyle = .None
+
+
         
         return cell
     }

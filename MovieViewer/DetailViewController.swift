@@ -30,15 +30,36 @@ class DetailViewController: UIViewController {
         titleLabel.text = movie.title
         
         if let posterPath = movie.poster! as String? {
-            let baseUrl = "http://image.tmdb.org/t/p/w500"
-            let posterUrl = NSURL(string: baseUrl + posterPath)
-            posterImageView.alpha = 0.0
-            posterImageView.setImageWithURL(posterUrl!)
+            let lowResPath = "http://image.tmdb.org/t/p/w45"
+            let highResPath = "http://image.tmdb.org/t/p/w500"
+            let lowResUrlRequest = NSURLRequest(URL: NSURL(string: lowResPath + posterPath)!)
+            let highResUrlRequest = NSURLRequest(URL: NSURL(string: highResPath + posterPath)!)
             
-            UIView.animateWithDuration(0.666, animations: { () -> Void in
-                    self.posterImageView.alpha = 1.0
-                }
-            )
+            self.posterImageView.setImageWithURLRequest(
+                lowResUrlRequest,
+                placeholderImage: nil,
+                success: { (lowResUrlRequest, lowResResponse, lowResImage) -> Void in
+                    self.posterImageView.alpha = 0.0
+                    self.posterImageView.image = lowResImage
+                    
+                    UIView.animateWithDuration(0.1, animations: { () -> Void in
+                        self.posterImageView.alpha = 1.0
+                        }, completion: { (success) -> Void in
+                        
+                            self.posterImageView.setImageWithURLRequest(
+                                highResUrlRequest,
+                                placeholderImage: lowResImage,
+                                success: { (highResUrlRequest, highResResponse, highResImage) -> Void in
+                                    self.posterImageView.image = highResImage
+                                }, failure: { (highResUrlRequest, highResResponse, error) -> Void in
+                                    self.posterImageView.image = lowResImage
+                            })
+                        }
+                    )
+                    
+                }, failure: { (lowResUrlRequest, lowResResponse, error) -> Void in
+                    self.posterImageView.backgroundColor = UIColor.grayColor()
+            })
         }
 
         // Do any additional setup after loading the view.
