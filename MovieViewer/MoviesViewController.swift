@@ -10,13 +10,15 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     
     @IBOutlet weak var networkErrorView: UIView!
     @IBOutlet weak var tableView: UITableView!
     var movies: [MovieModel] = []
     var endpoint: String!
+    var filteredData: [MovieModel]!
+    var searchActive: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,11 +27,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         networkErrorView.hidden = true;
         
+        filteredData = movies
+        
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
         
         
+        let searchBar = UISearchBar()
+        searchBar.sizeToFit()
+        navigationItem.titleView = searchBar
+        searchBar.delegate = self
+
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = NSURL(string: "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
@@ -59,6 +68,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             for movie in moviesArr {
                                 self.movies.append(MovieModel(json: (movie as? NSDictionary)!))
                             }
+                            
+                            self.filteredData = self.movies
 
                             self.tableView.reloadData()
                             
@@ -74,30 +85,23 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // Dispose of any resources that can be recreated.
     }
     
+    
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.movies.count ?? 0
+        return self.filteredData.count ?? 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
-        let movie = movies[indexPath.row]
+        let movie = filteredData[indexPath.row]
         
         if let posterPath = movie.poster! as String? {
             let baseUrl = "http://image.tmdb.org/t/p/w500"
             let posterUrl = NSURL(string: baseUrl + posterPath)
             cell.titleLabel.text = "\(movie.title!)"
             cell.overviewLabel.text = "\(movie.overview!)"
-            cell.posterView.alpha = 0.0
-            cell.titleLabel.alpha = 0.0
-            cell.overviewLabel.alpha = 0.0
             cell.posterView.setImageWithURL(posterUrl!)
             
-            UIView.animateWithDuration(0.333, animations: { () -> Void in
-                cell.posterView.alpha = 1.0
-                cell.titleLabel.alpha = 1.0
-                cell.overviewLabel.alpha = 1.0
-                }
-            )
         }
         
         //let backgroundView = UIView()
@@ -108,6 +112,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
         
         return cell
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredData = searchText.isEmpty ? movies : movies.filter({(movie: MovieModel) -> Bool in
+            return movie.title!.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+        })
+        tableView.reloadData()
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
@@ -135,6 +146,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         task.resume()
     }
 
+    func highlightCell(cell: UITableViewCell){
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.blackColor()
+        cell.selectedBackgroundView = backgroundView
+        cell.textLabel?.textColor = UIColor.whiteColor()
+    }
 
     
     // MARK: - Navigation

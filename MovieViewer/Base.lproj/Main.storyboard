@@ -22,7 +22,7 @@
                                         <rect key="frame" x="0.0" y="92" width="320" height="83"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JFY-PA-SsL" id="yQt-pf-eZu">
-                                            <rect key="frame" x="0.0" y="0.0" width="287" height="83"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="82.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="50q-cy-WJo">
@@ -74,6 +74,7 @@
                         <nil key="title"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="navigationItem" destination="3w3-eb-MjB" id="aaF-bN-3Fq"/>
                         <outlet property="networkErrorView" destination="WTr-Ft-iFk" id="vYe-2a-4Of"/>
                         <outlet property="tableView" destination="mzJ-8m-JQf" id="Szz-N1-CCI"/>
                     </connections>
