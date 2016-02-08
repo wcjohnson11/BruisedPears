@@ -10,7 +10,7 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UICollectionViewDataSource {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate{
 
     
     @IBOutlet weak var movieCollectionView: UICollectionView!
@@ -24,12 +24,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     @IBAction func segmentChanged(sender: AnyObject) {
         let segmentIndex = viewSegmenter.selectedSegmentIndex
-        if segmentIndex == 0 {
+        if segmentIndex == 1 {
             tableView.hidden = true
             movieCollectionView.hidden = false
         }
         
-        if segmentIndex == 1 {
+        if segmentIndex == 0 {
             tableView.hidden = false
             movieCollectionView.hidden = true
         }
@@ -37,8 +37,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        movieCollectionView.dataSource = self
+
         tableView.dataSource = self
         tableView.delegate = self
         networkErrorView.hidden = true;
