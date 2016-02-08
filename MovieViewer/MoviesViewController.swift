@@ -118,7 +118,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             cell.titleLabel.text = "\(movie.title!)"
             cell.overviewLabel.text = "\(movie.overview!)"
             cell.posterView.setImageWithURL(posterUrl!)
-            cell.backgroundColor = UIColor(red: 0.40, green: 0.9, blue: 0.45, alpha: 0.4)
+//            cell.backgroundColor = UIColor(hexString: "#A357B0")
             
         }
         

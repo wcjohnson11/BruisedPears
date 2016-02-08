@@ -64,7 +64,7 @@ struct Style{
         totalTextColor = charcoal
         totalBackgroundColor = white
         friendsViewBackgroundColor = slate
-        billTextColor = charcoal
+        billTextColor = purple
     }
     static func themeDark(){
         viewBackgroundColor = charcoal
