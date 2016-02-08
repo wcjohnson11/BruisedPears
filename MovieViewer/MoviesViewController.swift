@@ -10,9 +10,11 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UICollectionViewDataSource {
 
     
+    @IBOutlet weak var movieCollectionView: UICollectionView!
+    @IBOutlet weak var viewSegmenter: UISegmentedControl!
     @IBOutlet weak var networkErrorView: UIView!
     @IBOutlet weak var tableView: UITableView!
     var movies: [MovieModel] = []
@@ -20,9 +22,23 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var filteredData: [MovieModel]!
     var searchActive: Bool = false
     
+    @IBAction func segmentChanged(sender: AnyObject) {
+        let segmentIndex = viewSegmenter.selectedSegmentIndex
+        if segmentIndex == 0 {
+            tableView.hidden = true
+            movieCollectionView.hidden = false
+        }
+        
+        if segmentIndex == 1 {
+            tableView.hidden = false
+            movieCollectionView.hidden = true
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        movieCollectionView.dataSource = self
         tableView.dataSource = self
         tableView.delegate = self
         networkErrorView.hidden = true;
@@ -31,6 +47,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         if let navigationBar = navigationController?.navigationBar {
             navigationBar.backgroundColor = UIColor(red: 0.40, green: 1.0, blue: 0.25, alpha: 0.8)
             navigationBar.tintColor = UIColor(red: 0.40, green: 1.0, blue: 0.25, alpha: 0.8)
+            
             
             let shadow = NSShadow()
             shadow.shadowColor = UIColor.grayColor().colorWithAlphaComponent(0.5)
