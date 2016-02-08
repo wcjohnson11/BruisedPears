@@ -27,6 +27,22 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         networkErrorView.hidden = true;
         
+        self.navigationItem.title = "Names"
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.backgroundColor = UIColor(red: 0.40, green: 1.0, blue: 0.25, alpha: 0.8)
+            navigationBar.tintColor = UIColor(red: 0.40, green: 1.0, blue: 0.25, alpha: 0.8)
+            
+            let shadow = NSShadow()
+            shadow.shadowColor = UIColor.grayColor().colorWithAlphaComponent(0.5)
+            shadow.shadowOffset = CGSizeMake(2, 2);
+            shadow.shadowBlurRadius = 4;
+            navigationBar.titleTextAttributes = [
+                NSFontAttributeName : UIFont.boldSystemFontOfSize(22),
+                NSForegroundColorAttributeName : UIColor(red: 0.5, green: 0.15, blue: 0.15, alpha: 0.8),
+                NSShadowAttributeName : shadow
+            ]
+        }
+        
         filteredData = movies
         
         let refreshControl = UIRefreshControl()
@@ -38,6 +54,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.sizeToFit()
         navigationItem.titleView = searchBar
         searchBar.delegate = self
+        searchBar.placeholder = "search by title"
 
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
@@ -101,6 +118,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             cell.titleLabel.text = "\(movie.title!)"
             cell.overviewLabel.text = "\(movie.overview!)"
             cell.posterView.setImageWithURL(posterUrl!)
+            cell.backgroundColor = UIColor(red: 0.40, green: 0.9, blue: 0.45, alpha: 0.4)
             
         }
         
